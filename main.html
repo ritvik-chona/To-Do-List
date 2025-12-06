@@ -1,0 +1,42 @@
+\<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To-Do List with Sound</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>To-Do List</h1>
+        <p class="subtitle">Add tasks and keep your day organized!</p>
+        
+        <div class="input-container">
+            <input 
+                type="text" 
+                id="taskInput" 
+                placeholder="What needs to be done?"
+                autocomplete="off"
+            >
+            <button id="addBtn">Add</button>
+        </div>
+
+        <ul id="todoList">
+            <!-- Empty state - visible by default -->
+            <div class="empty-state" id="emptyState">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M9 11l3 3L22 4"></path>
+                    <path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"></path>
+                </svg>
+                <p>No tasks yet. Start by adding one above!</p>
+            </div>
+        </ul>
+
+        <div class="stats">
+            <span id="statsText">No tasks yet. Add one to get started!</span>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
