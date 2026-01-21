@@ -1,6 +1,4 @@
-// ============================================
 // AUDIO API FOR SOUND EFFECTS
-// ============================================
 
 const audioContext = new (window.AudioContext || window.webkitAudioContext)();
 
@@ -21,18 +19,14 @@ function playSound(frequency, duration) {
     oscillator.stop(audioContext.currentTime + duration);
 }
 
-// ============================================
 // STATE MANAGEMENT
-// ============================================
 
 let tasks = [];
 let currentFilter = 'all';
 let searchQuery = '';
 let editingTaskId = null;
 
-// ============================================
 // DOM ELEMENT REFERENCES
-// ============================================
 
 const taskInput = document.getElementById('taskInput');
 const categorySelect = document.getElementById('categorySelect');
@@ -50,9 +44,7 @@ const completedCount = document.getElementById('completedCount');
 const completionRate = document.getElementById('completionRate');
 const categoryStats = document.getElementById('categoryStats');
 
-// ============================================
 // LOCALSTORAGE FUNCTIONS
-// ============================================
 
 function loadTasksFromStorage() {
     try {
@@ -78,9 +70,7 @@ function saveTasksToStorage() {
     }
 }
 
-// ============================================
 // FEEDBACK MESSAGE SYSTEM
-// ============================================
 
 function showFeedback(message, type = 'success') {
     feedbackMessage.textContent = message;
@@ -92,11 +82,9 @@ function showFeedback(message, type = 'success') {
     }, 3000);
 }
 
-// ============================================
 // FILTERING & SEARCHING LOGIC
-// ============================================
 
-function getFilteredTasks() {
+function FilteredTasks() {
     let filtered = tasks;
     
     if (searchQuery.trim() !== '') {
@@ -106,7 +94,6 @@ function getFilteredTasks() {
     }
     
     if (currentFilter === 'all') {
-        // Show all
     } else if (currentFilter === 'active') {
         filtered = filtered.filter(task => !task.done);
     } else if (currentFilter === 'completed') {
@@ -118,15 +105,13 @@ function getFilteredTasks() {
     return filtered;
 }
 
-// ============================================
 // RENDER TASKS
-// ============================================
 
 function renderTasks() {
     const taskItems = todoList.querySelectorAll('.todo-item');
     taskItems.forEach(item => item.remove());
     
-    const filteredTasks = getFilteredTasks();
+    const filteredTasks = FilteredTasks();
     
     if (filteredTasks.length === 0) {
         emptyState.style.display = 'block';
@@ -195,9 +180,7 @@ function renderTasks() {
     updateStats();
 }
 
-// ============================================
 // HELPER FUNCTIONS
-// ============================================
 
 function getCategoryEmoji(category) {
     const emojis = {
@@ -213,31 +196,24 @@ function findTaskById(id) {
     return tasks.find(task => task.id === id);
 }
 
-// ============================================
-// 🆕 DUPLICATE DETECTION (TEXT + CATEGORY)
-// ============================================
+// DUPLICATE DETECTION (TEXT + CATEGORY)
 
 function isDuplicate(text, category) {
-    // Normalize text: trim whitespace and convert to lowercase
-    const normalizedText = text.trim().toLowerCase();
+    const normalText = text.trim().toLowerCase();
     
-    // Use find() to search for existing task with SAME text AND category
     const duplicate = tasks.find(task => 
-        task.text.toLowerCase() === normalizedText && 
+        task.text.toLowerCase() === normalText && 
         task.category === category
     );
     
-    // If duplicate found, highlight it briefly
     if (duplicate) {
         setTimeout(() => {
             const duplicateElement = document.querySelector(`[data-task-id="${duplicate.id}"]`);
             if (duplicateElement) {
-                // Scroll to duplicate and highlight it
                 duplicateElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
                 duplicateElement.style.border = '3px solid #ffaa00';
                 duplicateElement.style.boxShadow = '0 0 20px rgba(255, 170, 0, 0.5)';
                 
-                // Remove highlight after 2 seconds
                 setTimeout(() => {
                     duplicateElement.style.border = '2px solid transparent';
                     duplicateElement.style.boxShadow = 'none';
@@ -251,9 +227,7 @@ function isDuplicate(text, category) {
     return false;
 }
 
-// ============================================
 // INPUT VALIDATION
-// ============================================
 
 function validateTaskInput(text) {
     if (text.trim() === '') {
@@ -270,25 +244,21 @@ function validateTaskInput(text) {
     return true;
 }
 
-// ============================================
 // ADD TASK WITH DUPLICATE CHECK
-// ============================================
 
 function addTask() {
     const text = taskInput.value.trim();
     const category = categorySelect.value;
     
-    // Validate input
     if (!validateTaskInput(text)) {
         return;
     }
     
-    // 🆕 CHECK FOR DUPLICATES (same text + same category)
     if (isDuplicate(text, category)) {
         showFeedback(`⚠️ This task already exists in ${category} category!`, 'warning');
         taskInput.focus();
-        taskInput.select(); // Highlight text so user can edit it
-        playSound(400, 0.2); // Different sound for warning
+        taskInput.select(); 
+        playSound(400, 0.2); 
         return;
     }
 
@@ -315,9 +285,7 @@ function addTask() {
     console.log('✅ Added task:', newTask);
 }
 
-// ============================================
 // TOGGLE TASK
-// ============================================
 
 function toggleTask(id) {
     const task = findTaskById(id);
@@ -337,9 +305,7 @@ function toggleTask(id) {
     renderTasks();
 }
 
-// ============================================
 // EDIT TASK
-// ============================================
 
 function editTask(id, listItem) {
     if (editingTaskId !== null) {
@@ -386,7 +352,7 @@ function editTask(id, listItem) {
             return;
         }
         
-        // 🆕 Check if new text is duplicate in SAME category (but ignore current task)
+        // Check if new text is duplicate in SAME category (but ignore current task)
         const normalizedNewText = newText.toLowerCase();
         const duplicateExists = tasks.some(t => 
             t.id !== id && 
@@ -434,9 +400,7 @@ function editTask(id, listItem) {
     actionsDiv.appendChild(cancelBtn);
 }
 
-// ============================================
 // DELETE TASK
-// ============================================
 
 function deleteTask(id) {
     const task = findTaskById(id);
@@ -451,9 +415,7 @@ function deleteTask(id) {
     }
 }
 
-// ============================================
 // CLEAR ALL
-// ============================================
 
 function clearAllTasks() {
     if (tasks.length === 0) {
@@ -470,9 +432,7 @@ function clearAllTasks() {
     }
 }
 
-// ============================================
 // UPDATE STATISTICS
-// ============================================
 
 function updateStats() {
     const total = tasks.length;
@@ -504,9 +464,7 @@ function updateStats() {
     }
 }
 
-// ============================================
 // SEARCH SETUP
-// ============================================
 
 function setupSearch() {
     searchInput.addEventListener('input', (e) => {
@@ -519,9 +477,7 @@ function setupSearch() {
     });
 }
 
-// ============================================
 // FILTER BUTTONS
-// ============================================
 
 function setupFilterButtons() {
     filterBtns.forEach(btn => {
@@ -535,9 +491,7 @@ function setupFilterButtons() {
     });
 }
 
-// ============================================
 // EVENT LISTENERS
-// ============================================
 
 addBtn.addEventListener('click', addTask);
 
@@ -557,12 +511,10 @@ document.addEventListener('keydown', (e) => {
     }
 });
 
-// ============================================
 // INITIALIZE
-// ============================================
 
 function initApp() {
-    console.log('🚀 Initializing Task Manager...');
+    console.log('Initializing Task Manager...');
     
     loadTasksFromStorage();
     setupSearch();
@@ -579,43 +531,3 @@ function initApp() {
 }
 
 initApp();
-
-// ============================================
-// 📝 DUPLICATE DETECTION EXPLANATION:
-// ============================================
-/*
-
-WHAT IT DOES:
-- Before adding a task, checks if SAME text exists in SAME category
-- Allows same text in different categories (e.g., "Buy Milk" in Personal vs Work)
-- Uses find() to search through tasks array
-- Normalizes text (trim + lowercase) for comparison
-- Highlights the existing duplicate task
-- Shows warning message to user
-
-HOW IT WORKS:
-1. User tries to add "Buy Milk" in "Personal"
-2. isDuplicate() normalizes it to "buy milk"
-3. Searches tasks array with find() for same text AND category
-4. If found in same category, shows warning
-5. If found in different category, allows it ✅
-
-EXAMPLE SCENARIOS:
-✅ "Buy Milk" (Personal) → Allowed (first time)
-❌ "buy milk" (Personal) → Blocked (duplicate in same category)
-✅ "Buy Milk" (Work) → Allowed (different category)
-✅ "Buy Milk" (Urgent) → Allowed (different category)
-
-ARRAY METHODS USED:
-- find() - searches for first match with text AND category
-- some() - checks if any task matches (used in edit)
-- Logical AND (&&) - checks both conditions
-
-WHY IT'S SMART:
-- Prevents real duplicates (same task in same category)
-- Allows flexibility (same task across categories makes sense)
-- Better user experience
-- Shows understanding of complex conditions
-- Demonstrates real-world logic
-
-*/
