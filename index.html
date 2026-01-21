@@ -3,98 +3,116 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Advanced Task Manager</title>
+    <title>My Task Manager</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="container">
-        <h1>Advanced Task Manager</h1>
-        <p class="subtitle">Organize your tasks more efficiently!</p>
-        
-        <!-- Feedback Message System -->
-        <div id="feedbackMessage" class="feedback-message"></div>
-        
-        <!-- Add Task Section -->
-        <div class="input-container">
-            <input 
-                type="text" 
-                id="taskInput" 
-                placeholder="What needs to be done?"
-                autocomplete="off"
-                maxlength="200"
-            >
-            
-            <select id="categorySelect">
-                <option value="personal">Personal 👤</option>
-                <option value="work">Work 🏢</option>
-                <option value="urgent">Urgent 🚨</option>
-                <option value="other">Other 📌</option>
-            </select>
-            
-            <button id="addBtn">Add Task</button>
-        </div>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="app-header">
+            <h1>My Task Manager</h1>
+            <p>Keep track of your daily tasks</p>
+        </header>
 
-        <!-- Search and Controls Section -->
-        <div class="controls-section">
-            <div class="search-container">
-                <input 
-                    type="text" 
-                    id="searchInput" 
-                    placeholder="Search tasks...🔍"
-                    autocomplete="off"
-                >
-            </div>
+        <!-- Main Content Area -->
+        <div class="main-content">
             
-            <div class="filter-container">
-                <button class="filter-btn" data-filter="all">All</button>
-                <button class="filter-btn" data-filter="active">Active</button>
-                <button class="filter-btn" data-filter="completed">Completed</button>
-                <button class="filter-btn" data-filter="work">Work 🏢</button>
-                <button class="filter-btn" data-filter="personal">Personal 👤</button>
-                <button class="filter-btn" data-filter="urgent">Urgent 🚨</button>
-            </div>
-        </div>
+            <!-- Left Sidebar -->
+            <aside class="sidebar">
+                
+                <!-- Search Box -->
+                <div class="sidebar-section">
+                    <h3>Search</h3>
+                    <input 
+                        type="text" 
+                        id="searchInput" 
+                        placeholder="Search tasks..."
+                    >
+                </div>
 
-        <!-- Task List -->
-        <ul id="todoList">
-            <!-- Empty state -->
-            <div class="empty-state" id="emptyState">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M9 11l3 3L22 4"></path>
-                    <path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"></path>
-                </svg>
-                <p>No tasks yet. Start by adding one above!</p>
-            </div>
-        </ul>
+                <!-- Filter by Status -->
+                <div class="sidebar-section">
+                    <h3>Filter by Status</h3>
+                    <div class="filter-options">
+                        <label class="filter-option">
+                            <input type="radio" name="filter" value="all" checked>
+                            <span>All Tasks</span>
+                        </label>
+                        <label class="filter-option">
+                            <input type="radio" name="filter" value="active">
+                            <span>Active</span>
+                        </label>
+                        <label class="filter-option">
+                            <input type="radio" name="filter" value="completed">
+                            <span>Completed</span>
+                        </label>
+                    </div>
+                </div>
 
-        <!-- Statistics Section -->
-        <div class="stats">
-            <div class="stats-grid">
-                <div class="stat-item">
-                    <span class="stat-number" id="totalCount">0</span>
-                    <span class="stat-label">Total</span>
+                <!-- Filter by Category (Dropdown) -->
+                <div class="sidebar-section">
+                    <h3>Filter by Category</h3>
+                    <select id="categoryFilter" class="category-dropdown">
+                        <option value="all">All Categories</option>
+                        <option value="work">Work</option>
+                        <option value="personal">Personal</option>
+                        <option value="urgent">Urgent</option>
+                        <option value="other">Other</option>
+                    </select>
                 </div>
-                <div class="stat-item">
-                    <span class="stat-number" id="activeCount">0</span>
-                    <span class="stat-label">Active</span>
-                </div>
-                <div class="stat-item">
-                    <span class="stat-number" id="completedCount">0</span>
-                    <span class="stat-label">Completed</span>
-                </div>
-                <div class="stat-item">
-                    <span class="stat-number" id="completionRate">0%</span>
-                    <span class="stat-label">Complete</span>
-                </div>
-            </div>
-            
-            <!-- Category Breakdown -->
-            <div class="category-stats" id="categoryStats"></div>
-        </div>
 
-        <!-- Clear All Button -->
-        <div class="actions-footer">
-            <button class="clear-all-btn" id="clearAllBtn">Clear All Tasks 🗑️</button>
+                <!-- Statistics -->
+                <div class="sidebar-section stats-sidebar">
+                    <h3>Statistics</h3>
+                    <div class="stat-item">
+                        <span class="stat-label">Total:</span>
+                        <span class="stat-value" id="totalTasks">0</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Active:</span>
+                        <span class="stat-value" id="activeTasks">0</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Done:</span>
+                        <span class="stat-value" id="completedTasks">0</span>
+                    </div>
+                </div>
+
+                <!-- Clear Button -->
+                <button class="clear-btn" id="clearBtn">Clear All Tasks</button>
+            </aside>
+
+            <!-- Main Task Area -->
+            <main class="task-area">
+                
+                <!-- Feedback Message -->
+                <div id="feedbackMessage" class="feedback-message"></div>
+
+                <!-- Add Task Section -->
+                <div class="add-task-section">
+                    <input 
+                        type="text" 
+                        id="taskInput" 
+                        placeholder="Enter your task here..."
+                        maxlength="200"
+                    >
+                    <select id="categorySelect">
+                        <option value="personal">Personal</option>
+                        <option value="work">Work</option>
+                        <option value="urgent">Urgent</option>
+                        <option value="other">Other</option>
+                    </select>
+                    <button id="addBtn">Add Task</button>
+                </div>
+
+                <!-- Task List -->
+                <ul id="taskList">
+                    <div class="empty-message" id="emptyMessage">
+                        <p>No tasks yet. Add one above!</p>
+                    </div>
+                </ul>
+            </main>
+
         </div>
     </div>
 
